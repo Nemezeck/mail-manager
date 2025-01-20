@@ -1,0 +1,13 @@
+package com.bd.edu.co.mail_manager;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MailManagerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MailManagerApplication.class, args);
+	}
+
+}

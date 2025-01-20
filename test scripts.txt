@@ -1,0 +1,83 @@
+
+create table PAIS 
+(
+   IDPAIS               VARCHAR2(5)          not null,
+   NOMBREPAIS           VARCHAR2(30)         not null,
+   DOMINIO              VARCHAR2(3)          not null,
+   ID              INTEGER          not null,
+   constraint PK_PAIS primary key (IDPAIS)
+);
+
+create table ESTADO 
+(
+   IDESTADO             VARCHAR2(5)          not null,
+   NOMBREESTADO         VARCHAR2(30)         not null,
+   ID              INTEGER          not null,
+   constraint PK_ESTADO primary key (IDESTADO)
+);
+
+create table USUARIO 
+(
+   USUARIO              VARCHAR2(5)          not null,
+   IDESTADO             VARCHAR2(5)          not null,
+   IDPAIS               VARCHAR2(5)          not null,
+   NOMBRE               VARCHAR2(30)         not null,
+   APELLIDO             VARCHAR2(30)         not null,
+   FECHANACIMIENTO      DATE                 not null,
+   FECHACREACION        DATE                 not null,
+   CORREOALTERNO        VARCHAR2(30)         not null,
+   CELULAR              VARCHAR2(12)         not null,
+   PASSWORD              VARCHAR2(70)         not null,
+   ID              INTEGER         not null,
+   constraint PK_USUARIO primary key (USUARIO)
+);
+
+create index RELATIONSHIP_1_FK on USUARIO (
+   IDESTADO ASC
+);
+
+create index RELATIONSHIP_3_FK on USUARIO (
+   IDPAIS ASC
+);
+
+alter table USUARIO
+   add constraint FK_USUARIO_RELATIONS_ESTADO foreign key (IDESTADO)
+      references ESTADO (IDESTADO);
+
+alter table USUARIO
+   add constraint FK_USUARIO_RELATIONS_PAIS foreign key (IDPAIS)
+      references PAIS (IDPAIS);
+
+create sequence usuario_seq
+
+CREATE OR REPLACE TRIGGER usuario_trg
+BEFORE INSERT ON usuario
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT usuario_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create sequence pais_seq
+
+CREATE OR REPLACE TRIGGER pais_trg
+BEFORE INSERT ON pais
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT pais_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create sequence estado_seq
+
+CREATE OR REPLACE TRIGGER estado_trg
+BEFORE INSERT ON estado
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT estado_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+

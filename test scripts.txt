@@ -220,4 +220,120 @@ alter table MENSAJE
    add constraint FK_MENSAJE_RELATIONS_TIPOCARP foreign key (IDTIPOCARPETA)
       references TIPOCARPETA (IDTIPOCARPETA);
 
+create table CONTACTO 
+(
+   CONSECCONTACTO       INTEGER              not null,
+   USUARIO              VARCHAR2(5)          not null,
+   NOMBRECONTACTO       VARCHAR2(30),
+   CORREOCONTACTO       VARCHAR2(30)         not null,
+   ID       INTEGER              not null,
+   constraint PK_CONTACTO primary key (CONSECCONTACTO)
+);
 
+create sequence contacto_seq;
+
+CREATE OR REPLACE TRIGGER contacto_trg
+BEFORE INSERT ON contacto
+FOR EACH ROW
+WHEN (NEW.CONSECCONTACTO IS NULL)
+BEGIN
+    SELECT contacto_seq.NEXTVAL INTO :NEW.CONSECCONTACTO FROM DUAL;
+END;
+/
+
+create sequence contacto1_seq;
+
+CREATE OR REPLACE TRIGGER contacto1_trg
+BEFORE INSERT ON contacto
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT contacto1_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create index RELATIONSHIP_12_FK on CONTACTO (
+   USUARIO ASC
+);
+
+alter table CONTACTO
+   add constraint FK_CONTACTO_RELATIONS_USUARIO foreign key (USUARIO)
+      references USUARIO (USUARIO);
+
+
+create table TIPOCOPIA 
+(
+   IDTIPOCOPIA          VARCHAR2(4)          not null,
+   DESCTIPOCOPIA        VARCHAR2(30)         not null,
+   ID       INTEGER              not null,
+   constraint PK_TIPOCOPIA primary key (IDTIPOCOPIA)
+);
+
+create sequence tipocopia_seq;
+
+CREATE OR REPLACE TRIGGER tipocopia_trg
+BEFORE INSERT ON tipocopia
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT tipocopia_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create table DESTINATARIO 
+(
+   CONSECDESTINATARIO   INTEGER              not null,
+   IDTIPOCOPIA          VARCHAR2(4)          not null,
+   USUARIO              VARCHAR2(5)          not null,
+   IDMENSAJE            VARCHAR2(5)          not null,
+   IDPAIS               VARCHAR2(5)          not null,
+   CONSECCONTACTO       INTEGER              not null,
+   ID                  INTEGER               not null,
+   constraint PK_DESTINATARIO primary key (CONSECDESTINATARIO)
+);
+
+create index RELATIONSHIP_8_FK on DESTINATARIO (
+   IDTIPOCOPIA ASC
+);
+create index RELATIONSHIP_9_FK on DESTINATARIO (
+   USUARIO ASC,
+   IDMENSAJE ASC
+);
+create index RELATIONSHIP_10_FK on DESTINATARIO (
+   IDPAIS ASC
+);
+create index RELATIONSHIP_14_FK on DESTINATARIO (
+   CONSECCONTACTO ASC
+);
+
+create sequence destinatario_seq;
+
+CREATE OR REPLACE TRIGGER destinatario_seq
+BEFORE INSERT ON destinatario
+FOR EACH ROW
+WHEN (NEW.id IS NULL AND NEW.consecdestinatario IS NULL)
+DECLARE
+    seq_value NUMBER;
+BEGIN
+    SELECT destinatario_seq.nextval INTO seq_value FROM dual;
+    
+    :NEW.id := seq_value;
+    :NEW.consecdestinatario := seq_value;
+END;
+/
+
+alter table DESTINATARIO
+   add constraint FK_DESTINAT_RELATIONS_PAIS foreign key (IDPAIS)
+      references PAIS (IDPAIS);
+
+alter table DESTINATARIO
+   add constraint FK_DESTINAT_RELATIONS_CONTACTO foreign key (CONSECCONTACTO)
+      references CONTACTO (CONSECCONTACTO);
+
+alter table DESTINATARIO
+   add constraint FK_DESTINAT_RELATIONS_TIPOCOPI foreign key (IDTIPOCOPIA)
+      references TIPOCOPIA (IDTIPOCOPIA);
+
+alter table DESTINATARIO
+   add constraint FK_DESTINAT_RELATIONS_MENSAJE foreign key (USUARIO, IDMENSAJE)
+      references MENSAJE (USUARIO, IDMENSAJE);

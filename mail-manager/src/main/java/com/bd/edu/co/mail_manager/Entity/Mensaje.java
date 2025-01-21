@@ -43,4 +43,87 @@ public class Mensaje {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mensaje")
     private List<ArchivoAdjunto> archivos;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mensaje")
+    private List<Destinatario> destinatarios;
+
+    public MensajePK getMensajePK() {
+        return mensajePK;
+    }
+
+    public void setMensajePK(MensajePK mensajePK) {
+        this.mensajePK = mensajePK;
+    }
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+
+    public Mensaje getParentMessage() {
+        return parentMessage;
+    }
+
+    public void setParentMessage(Mensaje parentMessage) {
+        this.parentMessage = parentMessage;
+    }
+
+    public TipoCarpeta getTipoCarpeta() {
+        return tipoCarpeta;
+    }
+
+    public void setTipoCarpeta(TipoCarpeta tipoCarpeta) {
+        this.tipoCarpeta = tipoCarpeta;
+    }
+
+    public Pais getPais() {
+        return pais;
+    }
+
+    public void setPais(Pais pais) {
+        this.pais = pais;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public String getCuerpoMensaje() {
+        return cuerpoMensaje;
+    }
+
+    public void setCuerpoMensaje(String cuerpoMensaje) {
+        this.cuerpoMensaje = cuerpoMensaje;
+    }
+
+    public Date getFechaAccion() {
+        return fechaAccion;
+    }
+
+    public void setFechaAccion(Date fechaAccion) {
+        this.fechaAccion = fechaAccion;
+    }
+
+    public Time getHoraAccion() {
+        return horaAccion;
+    }
+
+    public void setHoraAccion(Time horaAccion) {
+        this.horaAccion = horaAccion;
+    }
+
+    public List<ArchivoAdjunto> getArchivos() {
+        return archivos;
+    }
+
+    public void setArchivos(List<ArchivoAdjunto> archivos) {
+        this.archivos = archivos;
+    }
 }

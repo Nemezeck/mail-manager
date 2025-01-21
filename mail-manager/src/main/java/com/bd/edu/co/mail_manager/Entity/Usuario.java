@@ -25,6 +25,9 @@ public class Usuario {
     @JoinColumn(name = "IDPAIS", nullable = false)
     private Pais pais;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Contacto> contactos;
+
     @Column(name = "NOMBRE")
     private String nombre;
     @Column(name = "APELLIDO")

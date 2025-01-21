@@ -26,6 +26,9 @@ public class Pais {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
     private List<Mensaje> mensajes;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
+    private List<Destinatario> destinatarios;
+
     public Integer getId() {
         return id;
     }

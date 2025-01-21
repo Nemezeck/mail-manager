@@ -19,11 +19,12 @@ public class Mensaje {
     @JoinColumn(name = "USUARIO", referencedColumnName = "USUARIO", insertable = false, updatable = false)
     private Usuario user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
             @JoinColumn(name = "MEN_IDMENSAJE", referencedColumnName = "IDMENSAJE", insertable = false, updatable = false),
             @JoinColumn(name = "MEN_USUARIO", referencedColumnName = "USUARIO", insertable = false, updatable = false)
     })
+    @NotFound(action=NotFoundAction.IGNORE)
     private Mensaje parentMessage;
 
     @ManyToOne

@@ -27,4 +27,7 @@ public interface UserRepository extends JpaRepository<Usuario, String> {
                     @Param("correoalterno") String correoAlterno,
                     @Param("celular") String celular,
                     @Param("password") String password);
+
+    @Query(value = "SELECT * FROM USUARIO U WHERE U.USUARIO=:username", nativeQuery = true)
+    Usuario getUserByIdNative(@Param("username") String id);
 }

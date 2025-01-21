@@ -13,4 +13,19 @@ public class MensajePK implements Serializable {
     @Column(name = "IDMENSAJE")
     private String idMensaje;
 
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getIdMensaje() {
+        return idMensaje;
+    }
+
+    public void setIdMensaje(String idMensaje) {
+        this.idMensaje = idMensaje;
+    }
 }

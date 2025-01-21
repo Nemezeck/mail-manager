@@ -1,12 +1,14 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "PAIS")
-
+@JsonIgnoreProperties({"usuarios"})
 public class Pais {
 
     @Column(name = "ID")
@@ -21,6 +23,7 @@ public class Pais {
     private String dominio;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
+    @JsonManagedReference
     private List<Usuario> usuarios;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")

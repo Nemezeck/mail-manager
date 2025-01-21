@@ -49,6 +49,9 @@ public class UserService {
         u.getFechaNacimiento(), u.getFechaCreacion(), u.getCorreoAlterno(), u.getCelular(), u.getPassword());
     }
 
+    public Usuario getUsuarioById(String id){
+        return userRepository.getUserByIdNative(id);
+    }
 
     private String createUsername(String name, String lastName){
         String username = name.charAt(0) + lastName.substring(0,2);

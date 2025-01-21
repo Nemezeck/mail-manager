@@ -16,7 +16,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
     @Autowired
     private UserRepository userRepository;
 
@@ -49,11 +49,6 @@ public class UserService implements UserDetailsService {
         u.getFechaNacimiento(), u.getFechaCreacion(), u.getCorreoAlterno(), u.getCelular(), u.getPassword());
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario u = userRepository.findById(username).orElse(null);
-        return new AuthenticatedUser(u);
-    }
 
     private String createUsername(String name, String lastName){
         String username = name.charAt(0) + lastName.substring(0,2);

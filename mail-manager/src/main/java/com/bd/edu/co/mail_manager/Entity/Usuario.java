@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USUARIO")
@@ -39,6 +40,9 @@ public class Usuario {
 
     @Column(name = "PASSWORD")
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Mensaje> mensajes;
 
     public Integer getId() {
         return id;

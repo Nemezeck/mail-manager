@@ -81,3 +81,143 @@ BEGIN
 END;
 /
 
+create table TIPOCARPETA 
+(
+   IDTIPOCARPETA        VARCHAR2(3)          not null,
+   DESCTIPOCARPETA      VARCHAR2(30)         not null,
+   ID              INTEGER         not null,
+   constraint PK_TIPOCARPETA primary key (IDTIPOCARPETA)
+);
+
+create sequence tipocarpeta_seq;
+
+CREATE OR REPLACE TRIGGER tipocarpeta_trg
+BEFORE INSERT ON tipocarpeta
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT tipocarpeta_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create table TIPOARCHIVO 
+(
+   IDTIPOARCHIVO        VARCHAR2(5)          not null,
+   DESCTIPOARCHIVO      VARCHAR2(30)         not null,
+   ID              INTEGER         not null,
+   constraint PK_TIPOARCHIVO primary key (IDTIPOARCHIVO)
+);
+
+create sequence tipoarchivo_seq;
+
+CREATE OR REPLACE TRIGGER tipoarchivo_trg
+BEFORE INSERT ON tipoarchivo
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT tipoarchivo_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create table ARCHIVOADJUNTO 
+(
+   CONSECARCHIVO        INTEGER              not null,
+   IDTIPOARCHIVO        VARCHAR2(5)          not null,
+   USUARIO              VARCHAR2(5)          not null,
+   IDMENSAJE            VARCHAR2(5)          not null,
+   NOMARCHIVO           VARCHAR2(30)         not null,
+   ID              INTEGER         not null,
+   constraint PK_ARCHIVOADJUNTO primary key (CONSECARCHIVO)
+);
+
+create sequence archivoadjunto_seq;
+
+CREATE OR REPLACE TRIGGER archivoadjunto_seq
+BEFORE INSERT ON archivoadjunto
+FOR EACH ROW
+WHEN (NEW.id IS NULL AND NEW.consecarchivo IS NULL)
+DECLARE
+    seq_value NUMBER;
+BEGIN
+    SELECT archivoadjunto_seq.nextval INTO seq_value FROM dual;
+    
+    :NEW.id := seq_value;
+    :NEW.consecarchivo := seq_value;
+END;
+/
+
+create index RELATIONSHIP_2_FK on ARCHIVOADJUNTO (
+   IDTIPOARCHIVO ASC
+);
+
+create index RELATIONSHIP_6_FK on ARCHIVOADJUNTO (
+   USUARIO ASC,
+   IDMENSAJE ASC
+);
+
+
+create table MENSAJE 
+(
+   USUARIO              VARCHAR2(5)          not null,
+   IDMENSAJE            VARCHAR2(5)          not null,
+   MEN_USUARIO          VARCHAR2(5),
+   MEN_IDMENSAJE        VARCHAR2(5),
+   IDTIPOCARPETA        VARCHAR2(3)          not null,
+   IDPAIS               VARCHAR2(5)          not null,
+   ASUNTO               VARCHAR2(255)        not null,
+   CUERPOMENSAJE        VARCHAR2(255)        not null,
+   FECHAACCION          DATE                 not null,
+   HORAACCION           DATE                 not null,
+   ID              INTEGER         not null,
+   constraint PK_MENSAJE primary key (USUARIO, IDMENSAJE)
+);
+
+create sequence mensaje_seq;
+
+CREATE OR REPLACE TRIGGER mensaje_trg
+BEFORE INSERT ON mensaje
+FOR EACH ROW
+WHEN (NEW.ID IS NULL)
+BEGIN
+    SELECT mensaje_seq.NEXTVAL INTO :NEW.ID FROM DUAL;
+END;
+/
+
+create index RELATIONSHIP_4_FK on MENSAJE (
+   MEN_USUARIO ASC,
+   MEN_IDMENSAJE ASC
+);
+create index RELATIONSHIP_5_FK on MENSAJE (
+   USUARIO ASC
+);
+create index RELATIONSHIP_7_FK on MENSAJE (
+   IDTIPOCARPETA ASC
+);
+create index RELATIONSHIP_15_FK on MENSAJE (
+   IDPAIS ASC
+);
+
+alter table ARCHIVOADJUNTO
+   add constraint FK_ARCHIVOA_RELATIONS_TIPOARCH foreign key (IDTIPOARCHIVO)
+      references TIPOARCHIVO (IDTIPOARCHIVO);
+
+alter table ARCHIVOADJUNTO
+   add constraint FK_ARCHIVOA_RELATIONS_MENSAJE foreign key (USUARIO, IDMENSAJE)
+      references MENSAJE (USUARIO, IDMENSAJE);
+alter table MENSAJE
+   add constraint FK_MENSAJE_RELATIONS_PAIS foreign key (IDPAIS)
+      references PAIS (IDPAIS);
+
+alter table MENSAJE
+   add constraint FK_MENSAJE_RELATIONS_MENSAJE foreign key (MEN_USUARIO, MEN_IDMENSAJE)
+      references MENSAJE (USUARIO, IDMENSAJE);
+
+alter table MENSAJE
+   add constraint FK_MENSAJE_RELATIONS_USUARIO foreign key (USUARIO)
+      references USUARIO (USUARIO);
+
+alter table MENSAJE
+   add constraint FK_MENSAJE_RELATIONS_TIPOCARP foreign key (IDTIPOCARPETA)
+      references TIPOCARPETA (IDTIPOCARPETA);
+
+

@@ -11,15 +11,13 @@ import java.util.List;
 @Table(name = "USUARIO")
 
 public class Usuario {
-    @Column(name= "ID")
-    private Integer id;
-
     @Id
-    @Column(name = "USUARIO")
+    @Column(name = "USUARIO", length = 5, nullable = false)
     private String usuario;
 
     @ManyToOne
     @JoinColumn(name = "IDESTADO", nullable = false)
+    @JsonBackReference
     private Estado estado;
 
     @ManyToOne
@@ -30,32 +28,25 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<Contacto> contactos;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "NOMBRE", length = 30, nullable = false)
     private String nombre;
-    @Column(name = "APELLIDO")
+    @Column(name = "APELLIDO", length = 30, nullable = false)
     private String apellido;
-    @Column(name = "FECHANACIMIENTO")
+    @Column(name = "FECHANACIMIENTO", nullable = false)
     private Date fechaNacimiento;
-    @Column(name = "FECHACREACION")
+    @Column(name = "FECHACREACION", nullable = false)
     private Date fechaCreacion;
-    @Column(name = "CORREOALTERNO")
+    @Column(name = "CORREOALTERNO", length = 30, nullable = false)
     private String correoAlterno;
-    @Column(name = "CELULAR")
+    @Column(name = "CELULAR", length = 12, nullable = false)
     private String celular;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", length = 70, nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")
     private List<Mensaje> mensajes;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUsuario() {
         return usuario;

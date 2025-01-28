@@ -31,7 +31,6 @@ public class UserService {
 
     @Transactional
     public void register(UsuarioDTO userDTO) {
-        System.out.println("Request body: " + userDTO);
 
         Usuario u = new Usuario();
         u.setNombre(userDTO.getNombre());
@@ -54,7 +53,7 @@ public class UserService {
     }
 
     private String createUsername(String name, String lastName){
-        String username = name.charAt(0) + lastName.substring(0,2);
+        String username = name.charAt(0) + lastName.substring(0,5);
         if(userRepository.findById(username).isPresent()){
             if(Character.isDigit(username.charAt(username.length() - 1))){
                 int newDigit = Character.getNumericValue(username.charAt(username.length() - 1));

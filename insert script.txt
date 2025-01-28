@@ -42,3 +42,15 @@ VALUES ('COO', 'Copia Oculta');
 
 INSERT INTO tipocopia (IDTIPOCOPIA, DESCTIPOCOPIA)
 VALUES ('CO', 'Copia');
+
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('PDF', 'Documento Portable');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('DOC', 'Documento');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('XLS', 'Hoja Calculo');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('GIF', 'Imagen');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('BMP', 'Imagen');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('MP4', 'Video');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('AVI', 'Video');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('MP3', 'Musica');
+INSERT INTO tipoarchivo (idtipoarchivo, desctipoarchivo) VALUES ('EXE', 'Ejecutable');
+
+

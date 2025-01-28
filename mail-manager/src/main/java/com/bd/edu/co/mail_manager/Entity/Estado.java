@@ -1,5 +1,6 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -8,26 +9,16 @@ import java.util.List;
 @Entity
 @Table(name = "ESTADO")
 public class Estado {
-
-    @Column(name = "ID")
-    private Integer id;
-
     @Id
-    @Column(name = "IDESTADO")
+    @Column(name = "IDESTADO", length = 5, nullable = false)
     private String idEstado;
-    @Column(name = "NOMBREESTADO")
+    @Column(name = "NOMBREESTADO", length = 30, nullable = false)
     private String nombreEstado;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estado")
+    @JsonManagedReference
     private List<Usuario> usuarios;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getIdEstado() {
         return idEstado;

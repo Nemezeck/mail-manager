@@ -3,6 +3,8 @@ package com.bd.edu.co.mail_manager.Controller;
 import com.bd.edu.co.mail_manager.DTO.AuthenticatedUser;
 import com.bd.edu.co.mail_manager.DTO.LoginRequest;
 import com.bd.edu.co.mail_manager.DTO.UsuarioDTO;
+import com.bd.edu.co.mail_manager.Entity.Pais;
+import com.bd.edu.co.mail_manager.Repository.PaisRepository;
 import com.bd.edu.co.mail_manager.Service.UserService;
 import org.apache.catalina.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +13,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PaisRepository repository;
 
     private final AuthenticationManager authenticationManager;
     public UserController(AuthenticationManager authenticationManager) {
@@ -47,5 +50,10 @@ public class UserController {
 
         // Return a response (e.g., a success message or token)
         return "Login successful!";
+    }
+    @GetMapping("/test")
+    public String test(){
+        Pais p = repository.getPaisByIdNative("063");
+        return p.getIdPais();
     }
 }

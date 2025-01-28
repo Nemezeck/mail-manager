@@ -11,15 +11,12 @@ import java.util.List;
 @JsonIgnoreProperties({"usuarios"})
 public class Pais {
 
-    @Column(name = "ID")
-    private Integer id;
-
     @Id
-    @Column(name = "IDPAIS")
+    @Column(name = "IDPAIS", length = 5, nullable = false)
     private String idPais;
-    @Column(name = "NOMBREPAIS")
+    @Column(name = "NOMBREPAIS", length = 30, nullable = false)
     private String nombrePais;
-    @Column(name = "DOMINIO")
+    @Column(name = "DOMINIO", length = 3, nullable = false)
     private String dominio;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
@@ -31,14 +28,6 @@ public class Pais {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
     private List<Destinatario> destinatarios;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getIdPais() {
         return idPais;

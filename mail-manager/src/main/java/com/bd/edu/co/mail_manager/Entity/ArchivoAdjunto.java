@@ -1,5 +1,6 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,16 +10,18 @@ public class ArchivoAdjunto {
     @Id
     @Column(name = "CONSECARCHIVO")
     private Integer consecArchivo;
-    @Column(name = "NOMARCHIVO")
+    @Column(name = "NOMARCHIVO", length = 30, nullable = false)
     private String nomArchivo;
 
     @ManyToOne
     @JoinColumn(name = "IDTIPOARCHIVO", nullable = false)
+    @JsonBackReference
     private TipoArchivo tipoArchivo;
 
     @ManyToOne
     @JoinColumn(name = "IDMENSAJE", nullable = false)
     @JoinColumn(name = "USUARIO", nullable = false)
+    @JsonBackReference
     private Mensaje mensaje;
 
     public Integer getConsecArchivo() {

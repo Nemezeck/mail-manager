@@ -48,7 +48,7 @@ alter table USUARIO
    add constraint FK_USUARIO_RELATIONS_PAIS foreign key (IDPAIS)
       references PAIS (IDPAIS);
 
-create sequence usuario_seq
+create sequence usuario_seq;
 
 CREATE OR REPLACE TRIGGER usuario_trg
 BEFORE INSERT ON usuario
@@ -59,7 +59,7 @@ BEGIN
 END;
 /
 
-create sequence pais_seq
+create sequence pais_seq;
 
 CREATE OR REPLACE TRIGGER pais_trg
 BEFORE INSERT ON pais
@@ -70,7 +70,7 @@ BEGIN
 END;
 /
 
-create sequence estado_seq
+create sequence estado_seq;
 
 CREATE OR REPLACE TRIGGER estado_trg
 BEFORE INSERT ON estado
@@ -135,13 +135,12 @@ create sequence archivoadjunto_seq;
 CREATE OR REPLACE TRIGGER archivoadjunto_seq
 BEFORE INSERT ON archivoadjunto
 FOR EACH ROW
-WHEN (NEW.id IS NULL AND NEW.consecarchivo IS NULL)
+WHEN (NEW.consecarchivo IS NULL)
 DECLARE
     seq_value NUMBER;
 BEGIN
     SELECT archivoadjunto_seq.nextval INTO seq_value FROM dual;
-    
-    :NEW.id := seq_value;
+   
     :NEW.consecarchivo := seq_value;
 END;
 /

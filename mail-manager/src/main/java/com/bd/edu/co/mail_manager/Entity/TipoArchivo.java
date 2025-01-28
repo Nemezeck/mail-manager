@@ -1,5 +1,6 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,14 +9,13 @@ import java.util.List;
 @Table(name = "TIPOARCHIVO")
 public class TipoArchivo {
     @Id
-    @Column(name = "IDTIPOARCHIVO")
+    @Column(name = "IDTIPOARCHIVO", length = 5, nullable = false)
     private String idTipoArchivo;
-    @Column(name = "DESCTIPOARCHIVO")
+    @Column(name = "DESCTIPOARCHIVO", length = 30, nullable = false)
     private String DescTipoArchivo;
-    @Column(name = "ID")
-    private Integer id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoArchivo")
+    @JsonManagedReference
     private List<ArchivoAdjunto> archivos;
 
     public String getIdTipoArchivo() {

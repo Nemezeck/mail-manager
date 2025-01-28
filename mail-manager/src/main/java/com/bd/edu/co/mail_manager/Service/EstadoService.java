@@ -11,6 +11,6 @@ public class EstadoService {
     private EstadoRepository estadoRepository;
 
     public Estado getEstadoById(String id){
-        return estadoRepository.getPaisByIdNative(id);
+        return estadoRepository.getReferenceById(id);
     }
 }

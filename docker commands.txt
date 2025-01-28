@@ -1,0 +1,20 @@
+docker exec -it oracle bash
+sqlplus C##basura/1234@localhost/freeXDB
+
+sqlplus C##taller/123@localhost/freeXDB
+
+--mount volume in container
+
+when container is running:
+
+docker exec -u root -it oracle bash
+
+docker cp D:/descargas/config/script_s1.sql oracle:/mnt/scripts/script_s1.sql
+
+replace path and container name and run script
+
+@/mnt/scripts/script_s1.sql
+
+
+if not running: 
+docker run -d -v D:/descargas/config:/mnt/scripts oracle/database:latest

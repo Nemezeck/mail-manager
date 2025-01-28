@@ -10,9 +10,9 @@ public class Contacto {
     @Id
     @Column(name = "CONSECCONTACTO")
     private Integer consecContacto;
-    @Column(name = "NOMBRECONTACTO")
+    @Column(name = "NOMBRECONTACTO", length = 30)
     private String nombreContacto;
-    @Column(name = "CORREOCONTACTO")
+    @Column(name = "CORREOCONTACTO", length = 30, nullable = false)
     private String correoContacto;
 
     @ManyToOne

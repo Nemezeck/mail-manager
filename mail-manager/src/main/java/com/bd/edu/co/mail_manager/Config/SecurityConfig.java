@@ -32,6 +32,7 @@ public class SecurityConfig {
                     authReq
                             .requestMatchers("/api/user/register").permitAll()
                             .requestMatchers("/api/user/login").permitAll()
+                            .requestMatchers("/api/user/test").permitAll()
                             .anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())

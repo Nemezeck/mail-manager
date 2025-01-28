@@ -3,6 +3,7 @@ package com.bd.edu.co.mail_manager.Service;
 import com.bd.edu.co.mail_manager.Entity.Estado;
 import com.bd.edu.co.mail_manager.Entity.TipoCarpeta;
 import com.bd.edu.co.mail_manager.Repository.TipoCarpetaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,4 @@ public class TipoCarpetaService {
         return tipoCarpetaRepository.getTipoCarpetaByIdNative(id);
     }
 
-    public TipoCarpeta getTipoCarpetaByName(String name){
-        return tipoCarpetaRepository.getTipoCarpetaByName(name);
-    }
 }

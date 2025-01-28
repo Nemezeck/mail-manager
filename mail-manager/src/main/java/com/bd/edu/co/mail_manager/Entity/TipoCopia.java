@@ -10,9 +10,9 @@ import jakarta.persistence.Table;
 public class TipoCopia {
 
     @Id
-    @Column(name = "IDTIPOCOPIA")
+    @Column(name = "IDTIPOCOPIA", length = 5, nullable = false)
     private String idTipoCopia;
-    @Column(name = "DESCTIPOCOPIA")
+    @Column(name = "DESCTIPOCOPIA", length = 30, nullable = false)
     private String descTipoCopia;
 
     public String getIdTipoCopia() {

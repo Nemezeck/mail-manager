@@ -7,7 +7,6 @@ public class MensajeRequestDTO {
     private String tipoCarpeta;
     private String usuario;
     private String idPais;
-    private String tipoArchivoId;
 
     public String getAsunto() {
         return asunto;
@@ -49,11 +48,4 @@ public class MensajeRequestDTO {
         this.idPais = idPais;
     }
 
-    public String getTipoArchivoId() {
-        return tipoArchivoId;
-    }
-
-    public void setTipoArchivoId(String tipoArchivoId) {
-        this.tipoArchivoId = tipoArchivoId;
-    }
 }

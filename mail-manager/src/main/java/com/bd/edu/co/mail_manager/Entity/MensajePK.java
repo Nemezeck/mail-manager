@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @Embeddable
 public class MensajePK implements Serializable {
-    @Column(name = "USUARIO")
+    @Column(name = "USUARIO" , length = 5, nullable = false)
     private String usuario;
-    @Column(name = "IDMENSAJE")
+    @Column(name = "IDMENSAJE", length = 5, nullable = false)
     private String idMensaje;
 
     public String getUsuario() {

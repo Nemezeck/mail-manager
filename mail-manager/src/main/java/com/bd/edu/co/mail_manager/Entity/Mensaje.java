@@ -1,5 +1,7 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -29,20 +31,22 @@ public class Mensaje {
 
     @ManyToOne
     @JoinColumn(name = "IDTIPOCARPETA", nullable = false)
+    @JsonBackReference
     private TipoCarpeta tipoCarpeta;
     @ManyToOne
     @JoinColumn(name = "IDPAIS", nullable = false)
     private Pais pais;
-    @Column(name = "ASUNTO")
+    @Column(name = "ASUNTO", length = 255, nullable = false)
     private String asunto;
-    @Column(name = "CUERPOMENSAJE")
+    @Column(name = "CUERPOMENSAJE", length = 255, nullable = false)
     private String cuerpoMensaje;
-    @Column(name = "FECHAACCION")
+    @Column(name = "FECHAACCION", nullable = false)
     private Date fechaAccion;
-    @Column(name = "HORAACCION")
+    @Column(name = "HORAACCION", nullable = false)
     private Time horaAccion;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mensaje")
+    @JsonManagedReference
     private List<ArchivoAdjunto> archivos;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mensaje")

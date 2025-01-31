@@ -11,7 +11,7 @@ public class Destinatario {
     private Integer consecDestinatario;
 
     @ManyToOne
-    @JoinColumn(name = "CONSECCONTACTO", nullable = false)
+    @JoinColumn(name = "CONSECCONTACTO")
     private Contacto contacto;
 
     @ManyToOne
@@ -66,4 +66,5 @@ public class Destinatario {
     public void setPais(Pais pais) {
         this.pais = pais;
     }
+
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 public class UserService {
@@ -43,6 +44,7 @@ public class UserService {
         u.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         u.setPais(paisService.getPaisById(userDTO.getIdPais()));
         u.setEstado(estadoService.getEstadoById(userDTO.getIdEstado()));
+        u.setContactos(new ArrayList<>());
 
         userRepository.insertUser(u.getUsuario(), u.getEstado().getIdEstado(), u.getPais().getIdPais(), u.getNombre(), u.getApellido(),
         u.getFechaNacimiento(), u.getFechaCreacion(), u.getCorreoAlterno(), u.getCelular(), u.getPassword());
@@ -53,7 +55,7 @@ public class UserService {
     }
 
     private String createUsername(String name, String lastName){
-        String username = name.charAt(0) + lastName.substring(0,5);
+        String username = name.charAt(0) + lastName.substring(0,4);
         if(userRepository.findById(username).isPresent()){
             if(Character.isDigit(username.charAt(username.length() - 1))){
                 int newDigit = Character.getNumericValue(username.charAt(username.length() - 1));
@@ -69,7 +71,7 @@ public class UserService {
         }
     }
 
-    private void updateUser(Usuario u){
+    public void updateUser(Usuario u){
         userRepository.save(u);
     }
 

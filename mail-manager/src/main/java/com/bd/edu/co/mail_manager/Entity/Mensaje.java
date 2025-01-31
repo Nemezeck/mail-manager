@@ -19,6 +19,7 @@ public class Mensaje {
     @ManyToOne
     @MapsId("usuario")
     @JoinColumn(name = "USUARIO", referencedColumnName = "USUARIO", insertable = false, updatable = false)
+    @JsonBackReference
     private Usuario user;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -3,6 +3,7 @@ package com.bd.edu.co.mail_manager.Controller;
 import com.bd.edu.co.mail_manager.DTO.AuthenticatedUser;
 import com.bd.edu.co.mail_manager.DTO.LoginRequest;
 import com.bd.edu.co.mail_manager.DTO.UsuarioDTO;
+import com.bd.edu.co.mail_manager.Entity.Contacto;
 import com.bd.edu.co.mail_manager.Entity.Pais;
 import com.bd.edu.co.mail_manager.Repository.PaisRepository;
 import com.bd.edu.co.mail_manager.Service.UserService;
@@ -24,6 +25,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PaisRepository repository;
+
 
     private final AuthenticationManager authenticationManager;
     public UserController(AuthenticationManager authenticationManager) {
@@ -51,9 +53,5 @@ public class UserController {
         // Return a response (e.g., a success message or token)
         return "Login successful!";
     }
-    @GetMapping("/test")
-    public String test(){
-        Pais p = repository.getPaisByIdNative("063");
-        return p.getIdPais();
-    }
+
 }

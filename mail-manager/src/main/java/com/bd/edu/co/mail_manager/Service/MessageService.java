@@ -1,10 +1,8 @@
 package com.bd.edu.co.mail_manager.Service;
 
 import com.bd.edu.co.mail_manager.DTO.MensajeRequestDTO;
-import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
-import com.bd.edu.co.mail_manager.Entity.Mensaje;
-import com.bd.edu.co.mail_manager.Entity.MensajePK;
-import com.bd.edu.co.mail_manager.Entity.TipoArchivo;
+import com.bd.edu.co.mail_manager.Entity.*;
+import com.bd.edu.co.mail_manager.Repository.DestinatarioRepository;
 import com.bd.edu.co.mail_manager.Repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +30,12 @@ public class MessageService {
     private TipoArchivoService archivoService;
     @Autowired
     private ArchivoAdjuntoService archivoAdjuntoService;
+    @Autowired
+    private ContactoService contactoService;
+    @Autowired
+    private TipoCopiaService tipoCopiaService;
+    @Autowired
+    private DestinatarioRepository destinatarioRepository;
 
     public Mensaje createMensaje(MensajeRequestDTO requestDTO){
         MensajePK mensajePK = new MensajePK();
@@ -108,5 +113,33 @@ public class MessageService {
         return firstChar + digits.toString() + lastChar;
     }
 
-    public Mensaje sendMessage(Mensaje message, )
+    public List<Destinatario> sendMessage(Mensaje message, List<String> mailContactos, String idType){
+
+        List<Contacto> contactos = contactoService.getContactosByMail(mailContactos);
+
+
+        if(contactos.isEmpty()){
+            throw new RuntimeException("No contacts found");
+        }
+
+        TipoCopia tipoCopia = tipoCopiaService.findById(idType);
+
+        List<Destinatario> destinatarios = new ArrayList<>();
+
+        for(Contacto c : contactos){
+            Destinatario d = new Destinatario();
+            d.setMensaje(message);
+            d.setContacto(c);
+            d.setPais(message.getPais());
+            d.setTipoCopia(tipoCopia);
+            destinatarioRepository.insertDestinatario(d.getContacto().getConsecContacto(),
+                    d.getMensaje().getMensajePK().getIdMensaje(),
+                    d.getMensaje().getMensajePK().getUsuario(),
+                    d.getMensaje().getPais().getIdPais(),
+                    idType);
+            destinatarios.add(d);
+        }
+
+        return destinatarios;
+    }
 }

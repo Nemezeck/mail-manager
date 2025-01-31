@@ -1,6 +1,7 @@
 package com.bd.edu.co.mail_manager.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -26,6 +27,7 @@ public class Usuario {
     private Pais pais;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @JsonManagedReference
     private List<Contacto> contactos;
 
     @Column(name = "NOMBRE", length = 30, nullable = false)
@@ -45,6 +47,7 @@ public class Usuario {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Mensaje> mensajes;
 
 

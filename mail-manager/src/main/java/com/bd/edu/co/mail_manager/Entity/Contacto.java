@@ -1,5 +1,6 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Contacto {
 
     @ManyToOne
     @JoinColumn(name = "USUARIO", nullable = false)
+    @JsonBackReference
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contacto")

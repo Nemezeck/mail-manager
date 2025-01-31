@@ -68,4 +68,8 @@ public class UserService {
             return username;
         }
     }
+
+    private void updateUser(Usuario u){
+        userRepository.save(u);
+    }
 }

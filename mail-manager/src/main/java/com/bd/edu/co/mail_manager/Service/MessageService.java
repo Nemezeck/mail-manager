@@ -107,4 +107,6 @@ public class MessageService {
 
         return firstChar + digits.toString() + lastChar;
     }
+
+    public Mensaje sendMessage(Mensaje message, )
 }

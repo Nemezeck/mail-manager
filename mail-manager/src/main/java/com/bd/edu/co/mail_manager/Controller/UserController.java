@@ -53,7 +53,8 @@ public class UserController {
         // Store the authentication in the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Map<String, String > m = new HashMap<>();
-        m.put(loginRequest.getUsername(), loginRequest.getPassword());
+        m.put("password", loginRequest.getPassword());
+        m.put("username", loginRequest.getUsername());
 
         return new ResponseEntity<>(m, HttpStatus.OK);
     }

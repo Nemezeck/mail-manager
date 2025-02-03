@@ -22,6 +22,10 @@ public class ContactoService {
 
     public Contacto addContacto(String contactUserId, String selfUsername){
 
+        if(contactUserId.equals(selfUsername)){
+            throw new RuntimeException("Can't add yourself as contact");
+        }
+
         Usuario u = userService.getUsuarioById(selfUsername);
         Usuario contactUser = userService.getUsuarioById(contactUserId);
 

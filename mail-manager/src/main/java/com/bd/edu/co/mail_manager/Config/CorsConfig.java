@@ -19,14 +19,14 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Allow all origins (Postman, localhost:4200, etc.)
-        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
 
         // Allow specific methods (or use List.of("*") to allow all)
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         // Allow specific headers (or use List.of("*") for all)
-        config.setAllowedHeaders(List.of("*"));
 
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Asegúrate de permitir Authorization
         // Allow credentials (if needed, e.g., cookies, authorization headers)
         config.setAllowCredentials(true);
 

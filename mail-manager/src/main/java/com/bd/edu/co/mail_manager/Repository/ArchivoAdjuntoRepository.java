@@ -17,4 +17,14 @@ public interface ArchivoAdjuntoRepository extends JpaRepository<ArchivoAdjunto, 
             nativeQuery = true)
     void insertArchivoAdjunto(@Param("nomarchivo") String attachmentName, @Param("idmensaje") String messageId, @Param("usuario") String username,
                               @Param("idtipoarchivo") String attachmentId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from archivoadjunto a " +
+            "where a.nomarchivo = :nomarchivo and " +
+            "a.idmensaje=:idmensaje " +
+            "and a.usuario = :usuario " +
+            "and a.idtipoarchivo = :idtipoarchivo", nativeQuery = true)
+    void deleteArchivoAdjunto(@Param("nomarchivo") String attachmentName, @Param("idmensaje") String messageId, @Param("usuario") String username,
+                              @Param("idtipoarchivo") String attachmentId);
 }

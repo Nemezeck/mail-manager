@@ -59,4 +59,9 @@ public class UserController {
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
 
+    @GetMapping("/getPais")
+    public ResponseEntity<String> getPaisIdByUsername(@RequestParam String username){
+        String s = userService.getPaisByUsername(username);
+        return new ResponseEntity<>(s, HttpStatus.OK);
+    }
 }

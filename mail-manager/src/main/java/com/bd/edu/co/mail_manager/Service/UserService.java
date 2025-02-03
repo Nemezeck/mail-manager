@@ -89,4 +89,8 @@ public class UserService {
             throw new RuntimeException("Not valid mail");
         }
     }
+
+    public String getPaisByUsername(String username){
+        return userRepository.getPaisIdByUsername(username);
+    }
 }

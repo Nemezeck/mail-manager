@@ -10,10 +10,14 @@ public class ArchivoAdjuntoService {
     @Autowired
     private ArchivoAdjuntoRepository repository;
 
-    public void insertArchivoPago(ArchivoAdjunto a){
+    public void insertArchivoAdjunto(ArchivoAdjunto a){
         repository.insertArchivoAdjunto(a.getNomArchivo(),
                 a.getMensaje().getMensajePK().getIdMensaje(),
                 a.getMensaje().getMensajePK().getUsuario(),
                 a.getTipoArchivo().getIdTipoArchivo());
+    }
+
+    public void deleteArchivoAdjunto(String messageID, String username, String attachmentIDType, String attachmentName){
+        repository.deleteArchivoAdjunto(attachmentName, messageID, username, attachmentIDType);
     }
 }

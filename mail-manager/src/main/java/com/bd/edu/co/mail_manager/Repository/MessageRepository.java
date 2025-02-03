@@ -48,4 +48,20 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
 
     @Query(value = "SELECT d.USUARIO FROM CONTACTO c, DESTINATARIO d WHERE d.IDMENSAJE = :id AND c.USUARIO = d.USUARIO AND d.IDTIPOCOPIA = 'CO'", nativeQuery = true)
     String getSender(@Param("id") String id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into mensaje (idmensaje, usuario, asunto, cuerpomensaje, fechaaccion, horaaccion, idpais, idtipocarpeta, men_idmensaje, men_usuario) " +
+            "values (:idmensaje, :usuario, :asunto, :cuerpomensaje, :fechaaccion, :horaaccion, :idpais, :idtipocarpeta, :men_idmensaje, :men_usuario)",
+            nativeQuery = true)
+    void insertMensajeWithParent(@Param("idmensaje") String idmensaje,
+                               @Param("usuario") String usuario,
+                               @Param("asunto") String asunto,
+                               @Param("cuerpomensaje") String cuerpomensaje,
+                               @Param("fechaaccion") Date fechaaccion,
+                               @Param("horaaccion") Time horaaccion,
+                               @Param("idpais") String idpais,
+                               @Param("idtipocarpeta") String idtipocarpeta,
+                                 @Param("men_idmensaje") String menIdMensaje,
+                                 @Param("men_usuario") String menUsuario);
 }

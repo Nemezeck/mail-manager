@@ -3,6 +3,7 @@ package com.bd.edu.co.mail_manager.Controller;
 import com.bd.edu.co.mail_manager.DTO.AttachmentDTO;
 import com.bd.edu.co.mail_manager.DTO.MensajeRequestDTO;
 import com.bd.edu.co.mail_manager.DTO.SendMessageRequestDTO;
+import com.bd.edu.co.mail_manager.DTO.UpdateMessageDTO;
 import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
 import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
@@ -49,11 +50,25 @@ public class MessageController {
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
+    @DeleteMapping("/removeAttachment")
+    public ResponseEntity<String> removeAttachment(@RequestBody AttachmentDTO attachmentDTO){
+        String s = messageService.removeAttachment(attachmentDTO.getMessageId(), attachmentDTO.getUsername(),
+                attachmentDTO.getAttachmentId(), attachmentDTO.getAttachmentName());
+        return new ResponseEntity<>(s, HttpStatus.OK);
+    }
+
     @PostMapping("/send")
     public ResponseEntity<Map<String, List<String>>> sendMessage(@RequestBody SendMessageRequestDTO sendMessageRequestDTO){
         Map<String, List<String>> m = messageService.sendMessage(sendMessageRequestDTO.getMessageId(), sendMessageRequestDTO.getUsername(),
                 sendMessageRequestDTO.getMailContactos(), sendMessageRequestDTO.getIdType());
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateMessage(@RequestBody UpdateMessageDTO updateMessageDTO){
+        String s = messageService.updateMensaje(updateMessageDTO.getMessageId(), updateMessageDTO.getUsername(), updateMessageDTO.getUpdatedField());
+        return new ResponseEntity<>(s, HttpStatus.OK);
+    }
+
 
 }

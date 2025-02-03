@@ -30,4 +30,7 @@ public interface UserRepository extends JpaRepository<Usuario, String> {
 
     @Query(value = "SELECT * FROM USUARIO U WHERE U.USUARIO=:username", nativeQuery = true)
     Usuario getUserByIdNative(@Param("username") String id);
+
+    @Query(value = "SELECT U.IDPAIS FROM USUARIO U WHERE U.USUARIO = :usuario", nativeQuery = true)
+    String getPaisIdByUsername(@Param("usuario") String username);
 }

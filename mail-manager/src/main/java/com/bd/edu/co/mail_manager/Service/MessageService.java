@@ -69,8 +69,8 @@ public class MessageService {
         return messageRepository.getMensajeById(messageID);
     }
 
-    public ArchivoAdjunto addAttachments(String messageID, String attachmentIDType, String attachmentName) {
-        Mensaje m = loadMessageById(messageID);
+    public ArchivoAdjunto addAttachments(String messageID, String username, String attachmentIDType, String attachmentName) {
+        Mensaje m = messageRepository.getMensajeByIdAndUser(messageID, username);
         ArchivoAdjunto archivoAdjunto = new ArchivoAdjunto();
         TipoArchivo ta = archivoService.getTipoArchivoByIdNative(attachmentIDType);
 
@@ -173,30 +173,45 @@ public class MessageService {
         messageRepository.updateMensaje(value, id, username);
     }
 
-    public void duplicateMessage(Mensaje m, List<Destinatario> destinatarios){
-        Mensaje sentMessage = new Mensaje();
-        for (Destinatario d : destinatarios){
+    public void duplicateMessage(Mensaje m, List<Destinatario> destinatarios) {
+        for (Destinatario d : destinatarios) {
+            Mensaje sentMessage = new Mensaje();
             sentMessage.setAsunto(m.getAsunto());
             sentMessage.setPais(d.getPais());
+
             MensajePK mensajePK = new MensajePK();
             mensajePK.setIdMensaje(m.getMensajePK().getIdMensaje());
             mensajePK.setUsuario(userService.findByMail(d.getContacto().getCorreoContacto()).getUsuario());
+
             sentMessage.setMensajePK(mensajePK);
             sentMessage.setFechaAccion(Date.valueOf(LocalDate.now()));
             sentMessage.setHoraAccion(Time.valueOf(LocalTime.now()));
             sentMessage.setCuerpoMensaje(m.getCuerpoMensaje());
-            if(!m.getArchivos().isEmpty() || m.getArchivos() != null){
-                sentMessage.setArchivos(m.getArchivos());
-                for(ArchivoAdjunto ad : m.getArchivos()){
-                    archivoAdjuntoService.insertArchivoPago(ad);
-                }
-            }
             sentMessage.setUser(userService.findByMail(d.getContacto().getCorreoContacto()));
             sentMessage.setTipoCarpeta(tipoCarpetaService.getTipoCarpetaById("Rec"));
-            messageRepository.insertMensajeNoParent(sentMessage.getMensajePK().getIdMensaje(), sentMessage.getMensajePK().getUsuario(), sentMessage.getAsunto(), sentMessage.getCuerpoMensaje(),
-                    sentMessage.getFechaAccion(), sentMessage.getHoraAccion(), sentMessage.getPais().getIdPais(), sentMessage.getTipoCarpeta().getIdTipoCarpeta());
+
+            messageRepository.insertMensajeNoParent(
+                    sentMessage.getMensajePK().getIdMensaje(),
+                    sentMessage.getMensajePK().getUsuario(),
+                    sentMessage.getAsunto(),
+                    sentMessage.getCuerpoMensaje(),
+                    sentMessage.getFechaAccion(),
+                    sentMessage.getHoraAccion(),
+                    sentMessage.getPais().getIdPais(),
+                    sentMessage.getTipoCarpeta().getIdTipoCarpeta()
+            );
+
+            sentMessage = messageRepository.getMensajeByIdAndUser(mensajePK.getIdMensaje(), mensajePK.getUsuario());
+
+            if (m.getArchivos() != null && !m.getArchivos().isEmpty()) {
+                for (ArchivoAdjunto ad : m.getArchivos()) {
+                    addAttachments(sentMessage.getMensajePK().getIdMensaje(), sentMessage.getMensajePK().getUsuario(), ad.getTipoArchivo().getIdTipoArchivo(), ad.getNomArchivo());
+                }
+            }
         }
     }
+
+
     public List<String> getAllMails(List<Destinatario> destinatarios){
         List<String> mails = new ArrayList<>();
         if (!destinatarios.isEmpty()) {

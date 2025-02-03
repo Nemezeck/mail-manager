@@ -44,7 +44,8 @@ public class MessageController {
 
     @PostMapping("/addAttachment")
     public ResponseEntity<ArchivoAdjunto> addAttachment(@RequestBody AttachmentDTO attachmentDTO){
-        ArchivoAdjunto a= messageService.addAttachments(attachmentDTO.getMessageId(), attachmentDTO.getAttachmentId(), attachmentDTO.getAttachmentName());
+        ArchivoAdjunto a= messageService.addAttachments(attachmentDTO.getMessageId(), attachmentDTO.getUsername(),
+                attachmentDTO.getAttachmentId(), attachmentDTO.getAttachmentName());
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 

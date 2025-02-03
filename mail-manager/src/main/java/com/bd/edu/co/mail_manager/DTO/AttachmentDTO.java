@@ -2,6 +2,7 @@ package com.bd.edu.co.mail_manager.DTO;
 
 public class AttachmentDTO {
     private String messageId;
+    private String username;
     private String attachmentId;
     private String attachmentName;
 
@@ -27,5 +28,13 @@ public class AttachmentDTO {
 
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

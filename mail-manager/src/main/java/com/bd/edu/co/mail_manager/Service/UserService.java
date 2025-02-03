@@ -54,22 +54,24 @@ public class UserService {
         return userRepository.getUserByIdNative(id);
     }
 
-    private String createUsername(String name, String lastName){
-        String username = name.charAt(0) + lastName.substring(0,4);
-        if(userRepository.findById(username).isPresent()){
-            if(Character.isDigit(username.charAt(username.length() - 1))){
-                int newDigit = Character.getNumericValue(username.charAt(username.length() - 1)) + 1;
-                char newChar = (char) ('0' + newDigit);
-                return username + newChar;
-            }
-            else{
-                return username.substring(0, username.length()-2) + "1";
-            }
+    private String createUsername(String name, String lastName) {
+        if (name == null || name.isEmpty() || lastName == null || lastName.isEmpty()) {
+            throw new IllegalArgumentException("Name and LastName cannot be empty");
         }
-        else {
-            return username;
+
+        String baseUsername = name.charAt(0) + (lastName.length() >= 4 ? lastName.substring(0, 4) : lastName);
+
+        String username = baseUsername;
+        int counter = 1;
+
+        while (userRepository.findById(username).isPresent()) {
+            username = baseUsername + counter;
+            counter++;
         }
+
+        return username;
     }
+
 
     public void updateUser(Usuario u){
         userRepository.save(u);

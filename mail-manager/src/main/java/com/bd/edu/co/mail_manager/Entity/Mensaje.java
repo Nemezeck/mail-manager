@@ -54,6 +54,11 @@ public class Mensaje {
     @JsonManagedReference
     private List<Destinatario> destinatarios;
 
+    @ManyToOne
+    @JoinColumn(name = "IDCATEGORIA", nullable = false)
+    @JsonBackReference
+    private Categoria categoria;
+
     public List<Destinatario> getDestinatarios() {
         return destinatarios;
     }
@@ -140,5 +145,13 @@ public class Mensaje {
 
     public void setArchivos(List<ArchivoAdjunto> archivos) {
         this.archivos = archivos;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

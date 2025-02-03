@@ -1,7 +1,9 @@
 package com.bd.edu.co.mail_manager.Service;
 
+import com.bd.edu.co.mail_manager.DTO.AttachmentDTO;
 import com.bd.edu.co.mail_manager.DTO.MensajeRequestDTO;
 import com.bd.edu.co.mail_manager.Entity.*;
+import com.bd.edu.co.mail_manager.Repository.CategoriaRepository;
 import com.bd.edu.co.mail_manager.Repository.DestinatarioRepository;
 import com.bd.edu.co.mail_manager.Repository.MessageRepository;
 import jakarta.transaction.Transactional;
@@ -39,6 +41,8 @@ public class MessageService {
     private DestinatarioRepository destinatarioRepository;
     @Autowired
     private MensajeRepositoryCustom repositoryCustom;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     public Mensaje createMensaje(MensajeRequestDTO requestDTO){
         MensajePK mensajePK = new MensajePK();
@@ -53,8 +57,9 @@ public class MessageService {
         mensaje.setHoraAccion(Time.valueOf(LocalTime.now()));
         mensaje.setTipoCarpeta(tipoCarpetaService.getTipoCarpetaById(requestDTO.getTipoCarpeta()));
         mensaje.setUser(userService.getUsuarioById(requestDTO.getUsuario()));
+        mensaje.setCategoria(categoriaRepository.getCategoriaById(requestDTO.getIdCategoria()));
         messageRepository.insertMensajeNoParent(mensaje.getMensajePK().getIdMensaje(), mensaje.getMensajePK().getUsuario(), mensaje.getAsunto(), mensaje.getCuerpoMensaje(),
-                mensaje.getFechaAccion(), mensaje.getHoraAccion(), mensaje.getPais().getIdPais(), mensaje.getTipoCarpeta().getIdTipoCarpeta());
+                mensaje.getFechaAccion(), mensaje.getHoraAccion(), mensaje.getPais().getIdPais(), mensaje.getTipoCarpeta().getIdTipoCarpeta(), mensaje.getCategoria().getIdCategoria());
         return mensaje;
     }
 
@@ -227,6 +232,7 @@ public class MessageService {
             sentMessage.setCuerpoMensaje(m.getCuerpoMensaje());
             sentMessage.setUser(userService.findByMail(d.getContacto().getCorreoContacto()));
             sentMessage.setTipoCarpeta(tipoCarpetaService.getTipoCarpetaById("Rec"));
+            sentMessage.setCategoria(m.getCategoria());
 
             messageRepository.insertMensajeNoParent(
                     sentMessage.getMensajePK().getIdMensaje(),
@@ -236,7 +242,8 @@ public class MessageService {
                     sentMessage.getFechaAccion(),
                     sentMessage.getHoraAccion(),
                     sentMessage.getPais().getIdPais(),
-                    sentMessage.getTipoCarpeta().getIdTipoCarpeta()
+                    sentMessage.getTipoCarpeta().getIdTipoCarpeta(),
+                    sentMessage.getCategoria().getIdCategoria()
             );
 
             sentMessage = messageRepository.getMensajeByIdAndUser(mensajePK.getIdMensaje(), mensajePK.getUsuario());
@@ -264,7 +271,7 @@ public class MessageService {
     }
 
     @Transactional
-    public Map<String, List<String>> forwardMessage(String messageId, String senderUsername, List<String> mailContactos, String idType, String username, String newBody, List<ArchivoAdjunto> newAttachments) {
+    public Map<String, List<String>> forwardMessage(String messageId, String senderUsername, List<String> mailContactos, String idType, String username, String newBody) {
 
         try {
             Mensaje parentMessage = messageRepository.getMensajeByIdAndUser(messageId, senderUsername);
@@ -290,13 +297,8 @@ public class MessageService {
                 throw new RuntimeException("No user found");
             }
 
-            Mensaje newMessage = createForwardMessage(parentMessage, newBody, username, forwarderUser.getPais().getIdPais());
+            Mensaje newMessage = createForwardMessage(parentMessage, newBody, username, forwarderUser.getPais().getIdPais(), parentMessage.getCategoria().getIdCategoria());
 
-            if (newAttachments != null && !newAttachments.isEmpty()) {
-                for (ArchivoAdjunto ad : newAttachments) {
-                    addAttachments(newMessage.getMensajePK().getIdMensaje(), newMessage.getMensajePK().getUsuario(), ad.getTipoArchivo().getIdTipoArchivo(), ad.getNomArchivo());
-                }
-            }
 
             List<Destinatario> destinatarios = new ArrayList<>();
             for(Contacto c : contactos){
@@ -319,7 +321,7 @@ public class MessageService {
 
             updateTipoCarpeta("Env", messageId, senderUsername);
 
-            duplicateMessageWithParent(parentMessage, destinatarios);
+            duplicateMessageWithParent(newMessage, destinatarios);
 
             return m;
         } catch (RuntimeException e) {
@@ -328,7 +330,7 @@ public class MessageService {
     }
 
 
-    public Mensaje createForwardMessage(Mensaje m, String newBody, String username, String idPais) {
+    public Mensaje createForwardMessage(Mensaje m, String newBody, String username, String idPais, String idCategoria) {
         if (m == null) {
             throw new IllegalArgumentException("Cannot forward a null message");
         }
@@ -341,6 +343,7 @@ public class MessageService {
         dto.setUsuario(username);
         dto.setTipoCarpeta("Env");
         dto.setIdPais(idPais);
+        dto.setIdCategoria(idCategoria);
 
         Mensaje forwardedMessage = createMensaje(dto);
         forwardedMessage.setParentMessage(m);
@@ -354,17 +357,24 @@ public class MessageService {
             }
         }
 
+        messageRepository.updateParentId(forwardedMessage.getParentMessage().getMensajePK().getIdMensaje(),
+                forwardedMessage.getParentMessage().getMensajePK().getUsuario(),
+                forwardedMessage.getMensajePK().getUsuario(),
+                forwardedMessage.getMensajePK().getIdMensaje());
+
         return forwardedMessage;
     }
 
     public List<String> getMessageChainIds(Mensaje mensaje) {
         List<String> messageIds = new ArrayList<>();
-        while (mensaje.getParentMessage() != null) {
-            mensaje = mensaje.getParentMessage();
+        while (mensaje != null && mensaje.getParentMessage() != null) {
             messageIds.add(mensaje.getMensajePK().getIdMensaje());
+            mensaje = mensaje.getParentMessage();
         }
+        messageIds.add(mensaje.getMensajePK().getIdMensaje());
         return messageIds;
     }
+
 
     public void duplicateMessageWithParent (Mensaje m, List<Destinatario> destinatarios) {
         for (Destinatario d : destinatarios) {
@@ -382,7 +392,8 @@ public class MessageService {
             sentMessage.setCuerpoMensaje(m.getCuerpoMensaje());
             sentMessage.setUser(userService.findByMail(d.getContacto().getCorreoContacto()));
             sentMessage.setTipoCarpeta(tipoCarpetaService.getTipoCarpetaById("Rec"));
-            sentMessage.setParentMessage(m);
+            sentMessage.setParentMessage(m.getParentMessage());
+            sentMessage.setCategoria(m.getCategoria());
 
             messageRepository.insertMensajeWithParent(
                     sentMessage.getMensajePK().getIdMensaje(),
@@ -394,7 +405,8 @@ public class MessageService {
                     sentMessage.getPais().getIdPais(),
                     sentMessage.getTipoCarpeta().getIdTipoCarpeta(),
                     sentMessage.getParentMessage().getMensajePK().getIdMensaje(),
-                    sentMessage.getParentMessage().getMensajePK().getUsuario()
+                    sentMessage.getParentMessage().getMensajePK().getUsuario(),
+                    sentMessage.getCategoria().getIdCategoria()
             );
 
             sentMessage = messageRepository.getMensajeByIdAndUser(mensajePK.getIdMensaje(), mensajePK.getUsuario());

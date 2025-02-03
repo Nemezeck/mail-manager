@@ -7,6 +7,7 @@ public class MensajeRequestDTO {
     private String tipoCarpeta;
     private String usuario;
     private String idPais;
+    private String idCategoria;
 
     public String getAsunto() {
         return asunto;
@@ -48,4 +49,12 @@ public class MensajeRequestDTO {
         this.idPais = idPais;
     }
 
+
+    public String getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(String idCategoria) {
+        this.idCategoria = idCategoria;
+    }
 }

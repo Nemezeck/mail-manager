@@ -1,9 +1,6 @@
 package com.bd.edu.co.mail_manager.Controller;
 
-import com.bd.edu.co.mail_manager.DTO.AttachmentDTO;
-import com.bd.edu.co.mail_manager.DTO.MensajeRequestDTO;
-import com.bd.edu.co.mail_manager.DTO.SendMessageRequestDTO;
-import com.bd.edu.co.mail_manager.DTO.UpdateMessageDTO;
+import com.bd.edu.co.mail_manager.DTO.*;
 import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
 import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
@@ -70,5 +67,10 @@ public class MessageController {
         return new ResponseEntity<>(s, HttpStatus.OK);
     }
 
-
+    @PostMapping("/forward")
+    public ResponseEntity<Map<String, List<String>>> forwardMessage(@RequestBody ForwardMessageRequestDTO dto){
+        Map<String, List<String>> m = messageService.forwardMessage(dto.getMessageId(), dto.getSenderUsername(), dto.getMailContactos(),
+                dto.getIdType(), dto.getUsername(), dto.getNewBody());
+        return new ResponseEntity<>(m, HttpStatus.OK);
+    }
 }

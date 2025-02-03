@@ -1,5 +1,7 @@
 package com.bd.edu.co.mail_manager.DTO;
 
+import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
+
 import java.util.List;
 
 public class ForwardMessageRequestDTO {
@@ -9,6 +11,7 @@ public class ForwardMessageRequestDTO {
     String idType;
     String username;
     String newBody;
+    List<AttachmentDTO> newAttachments;
 
     public String getMessageId() {
         return messageId;
@@ -56,5 +59,13 @@ public class ForwardMessageRequestDTO {
 
     public void setNewBody(String newBody) {
         this.newBody = newBody;
+    }
+
+    public List<AttachmentDTO> getNewAttachments() {
+        return newAttachments;
+    }
+
+    public void setNewAttachments(List<AttachmentDTO> newAttachments) {
+        this.newAttachments = newAttachments;
     }
 }

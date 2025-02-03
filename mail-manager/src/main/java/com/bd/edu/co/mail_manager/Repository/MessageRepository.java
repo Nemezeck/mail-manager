@@ -20,8 +20,8 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into mensaje (idmensaje, usuario, asunto, cuerpomensaje, fechaaccion, horaaccion, idpais, idtipocarpeta) " +
-            "values (:idmensaje, :usuario, :asunto, :cuerpomensaje, :fechaaccion, :horaaccion, :idpais, :idtipocarpeta)",
+    @Query(value = "insert into mensaje (idmensaje, usuario, asunto, cuerpomensaje, fechaaccion, horaaccion, idpais, idtipocarpeta, idcategoria) " +
+            "values (:idmensaje, :usuario, :asunto, :cuerpomensaje, :fechaaccion, :horaaccion, :idpais, :idtipocarpeta, :idcategoria)",
             nativeQuery = true)
     void insertMensajeNoParent(@Param("idmensaje") String idmensaje,
                                @Param("usuario") String usuario,
@@ -30,7 +30,8 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
                                @Param("fechaaccion") Date fechaaccion,
                                @Param("horaaccion") Time horaaccion,
                                @Param("idpais") String idpais,
-                               @Param("idtipocarpeta") String idtipocarpeta);
+                               @Param("idtipocarpeta") String idtipocarpeta,
+                               @Param("idcategoria") String idcategoria);
 
     @Query(value = "select * from mensaje m where m.usuario=:usuario and m.idtipocarpeta=:idtipocarpeta", nativeQuery = true)
     List<Mensaje> getAllMailsByType(@Param("usuario") String username, @Param("idtipocarpeta") String idType);
@@ -51,8 +52,8 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into mensaje (idmensaje, usuario, asunto, cuerpomensaje, fechaaccion, horaaccion, idpais, idtipocarpeta, men_idmensaje, men_usuario) " +
-            "values (:idmensaje, :usuario, :asunto, :cuerpomensaje, :fechaaccion, :horaaccion, :idpais, :idtipocarpeta, :men_idmensaje, :men_usuario)",
+    @Query(value = "insert into mensaje (idmensaje, usuario, asunto, cuerpomensaje, fechaaccion, horaaccion, idpais, idtipocarpeta, men_idmensaje, men_usuario, idcategoria) " +
+            "values (:idmensaje, :usuario, :asunto, :cuerpomensaje, :fechaaccion, :horaaccion, :idpais, :idtipocarpeta, :men_idmensaje, :men_usuario, :idcategoria)",
             nativeQuery = true)
     void insertMensajeWithParent(@Param("idmensaje") String idmensaje,
                                @Param("usuario") String usuario,
@@ -63,5 +64,14 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
                                @Param("idpais") String idpais,
                                @Param("idtipocarpeta") String idtipocarpeta,
                                  @Param("men_idmensaje") String menIdMensaje,
-                                 @Param("men_usuario") String menUsuario);
+                                 @Param("men_usuario") String menUsuario,
+                                 @Param("idcategoria") String idCategoria);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update mensaje set men_idmensaje = :parentidmensaje, men_usuario = :parentusuario " +
+            "where usuario = :usuario and idmensaje = :idmensaje", nativeQuery = true)
+    void updateParentId(@Param("parentidmensaje") String parentMessageId, @Param("parentusuario") String parentUsername,
+                        @Param("usuario") String username, @Param("idmensaje") String messageId);
+
 }

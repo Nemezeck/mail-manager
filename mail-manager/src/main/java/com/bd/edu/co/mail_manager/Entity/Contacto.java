@@ -1,6 +1,7 @@
 package com.bd.edu.co.mail_manager.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class Contacto {
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contacto")
+    @JsonManagedReference
     private List<Destinatario> destinatarios;
 
     public Integer getConsecContacto() {

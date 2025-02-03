@@ -2,7 +2,9 @@ package com.bd.edu.co.mail_manager.Controller;
 
 import com.bd.edu.co.mail_manager.DTO.AttachmentDTO;
 import com.bd.edu.co.mail_manager.DTO.MensajeRequestDTO;
+import com.bd.edu.co.mail_manager.DTO.SendMessageRequestDTO;
 import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
+import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
 import com.bd.edu.co.mail_manager.Repository.TipoCarpetaRepository;
 import com.bd.edu.co.mail_manager.Service.MessageService;
@@ -12,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("api/message")
@@ -44,4 +48,10 @@ public class MessageController {
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
+    @PostMapping("/send")
+    public ResponseEntity<Map<String, List<String>>> sendMessage(@RequestBody SendMessageRequestDTO sendMessageRequestDTO){
+        Map<String, List<String>> m = messageService.sendMessage(sendMessageRequestDTO.getMessageId(), sendMessageRequestDTO.getUsername(),
+                sendMessageRequestDTO.getMailContactos(), sendMessageRequestDTO.getIdType());
+        return new ResponseEntity<>(m, HttpStatus.OK);
+    }
 }

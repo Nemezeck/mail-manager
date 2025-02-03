@@ -51,6 +51,7 @@ public class Mensaje {
     private List<ArchivoAdjunto> archivos;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mensaje")
+    @JsonManagedReference
     private List<Destinatario> destinatarios;
 
     public MensajePK getMensajePK() {

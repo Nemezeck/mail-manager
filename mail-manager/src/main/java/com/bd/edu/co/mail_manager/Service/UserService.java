@@ -58,7 +58,7 @@ public class UserService {
         String username = name.charAt(0) + lastName.substring(0,4);
         if(userRepository.findById(username).isPresent()){
             if(Character.isDigit(username.charAt(username.length() - 1))){
-                int newDigit = Character.getNumericValue(username.charAt(username.length() - 1));
+                int newDigit = Character.getNumericValue(username.charAt(username.length() - 1)) + 1;
                 char newChar = (char) ('0' + newDigit);
                 return username + newChar;
             }
@@ -75,4 +75,16 @@ public class UserService {
         userRepository.save(u);
     }
 
+    public Usuario findByMail(String mail){
+        char delimiter = '@';
+
+        int index = mail.indexOf(delimiter);
+
+        if (index != -1) {
+            String result = mail.substring(0, index);
+            return getUsuarioById(result);
+        } else {
+            throw new RuntimeException("Not valid mail");
+        }
+    }
 }

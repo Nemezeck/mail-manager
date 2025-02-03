@@ -1,9 +1,12 @@
 package com.bd.edu.co.mail_manager.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "DESTINATARIO")
+@JsonIgnoreProperties({"contacto"})
 public class Destinatario {
 
     @Id
@@ -12,19 +15,23 @@ public class Destinatario {
 
     @ManyToOne
     @JoinColumn(name = "CONSECCONTACTO")
+    @JsonBackReference
     private Contacto contacto;
 
     @ManyToOne
     @JoinColumn(name = "IDTIPOCOPIA", nullable = false)
+    @JsonBackReference
     private TipoCopia tipoCopia;
 
     @ManyToOne
     @JoinColumn(name = "IDPAIS", nullable = false)
+    @JsonBackReference
     private Pais pais;
 
     @ManyToOne
     @JoinColumn(name = "IDMENSAJE", nullable = false)
     @JoinColumn(name = "USUARIO", nullable = false)
+    @JsonBackReference
     private Mensaje mensaje;
 
     public Integer getConsecDestinatario() {

@@ -19,7 +19,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Allow all origins (Postman, localhost:4200, etc.)
-        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedOrigins(List.of("* "));
 
         // Allow specific methods (or use List.of("*") to allow all)
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

@@ -61,9 +61,36 @@ public class MessageService {
         return mensaje;
     }
 
-    public List<Mensaje> getAllMessagesByType(String idTipoCarpeta, String username){
-        return messageRepository.getAllMailsByType(username, idTipoCarpeta);
+    public Map<?, ?> getAllMessagesByType(String idTipoCarpeta, String username) {
+        if (idTipoCarpeta.equals("Rec")) {
+            List<Mensaje> mensajes = messageRepository.getAllMailsByType(username, idTipoCarpeta);
+            Map<String, Mensaje> map = new HashMap<>();
+            for (Mensaje m : mensajes) {
+                String sender = messageRepository.getSender(m.getMensajePK().getIdMensaje());
+                map.put(sender, m);
+            }
+            return map;
+        } else if (idTipoCarpeta.equals("Env")) {
+            List<Mensaje> mensajes = messageRepository.getAllMailsByType(username, idTipoCarpeta);
+            Map<List<String>, Mensaje> map = new HashMap<>();
+            for (Mensaje m : mensajes) {
+                List<String> recipients = getAllMails(m.getDestinatarios());
+                map.put(recipients, m);
+            }
+            return map;
+        } else if (idTipoCarpeta.equals("Bor")) {
+            List<Mensaje> mensajes = messageRepository.getAllMailsByType(username, idTipoCarpeta);
+            Map<String, Mensaje> map = new HashMap<>();
+            for (Mensaje m : mensajes) {
+                map.put(m.getMensajePK().getIdMensaje(), m);
+            }
+            return map;
+        }
+
+        throw new IllegalArgumentException("Invalid folder type: " + idTipoCarpeta);
     }
+
+
 
     public Mensaje loadMessageById(String messageID){
         return messageRepository.getMensajeById(messageID);

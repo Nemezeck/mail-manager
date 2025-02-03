@@ -6,6 +6,7 @@ import com.bd.edu.co.mail_manager.DTO.SendMessageRequestDTO;
 import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
 import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
+import com.bd.edu.co.mail_manager.Entity.Usuario;
 import com.bd.edu.co.mail_manager.Repository.TipoCarpetaRepository;
 import com.bd.edu.co.mail_manager.Service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,18 @@ public class MessageController {
     private TipoCarpetaRepository repository;
 
     @PostMapping("/create")
-    public ResponseEntity<Mensaje> register(@RequestBody MensajeRequestDTO requestDTO) {
+    public ResponseEntity<Mensaje> create(@RequestBody MensajeRequestDTO requestDTO) {
         Mensaje m = messageService.createMensaje(requestDTO);
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
 
     @GetMapping("/inbox")
-    public ResponseEntity<List<Mensaje>> getAllMailsByType(
+    public ResponseEntity<Map<?, ?>> getAllMailsByType(
             @RequestParam(name = "idType") String idType,
             @RequestParam(name = "username") String username) {
-        List<Mensaje> m = messageService.getAllMessagesByType(idType, username);
+        Map<?, ?> m = messageService.getAllMessagesByType(idType, username);
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
-
 
     @PostMapping("/addAttachment")
     public ResponseEntity<ArchivoAdjunto> addAttachment(@RequestBody AttachmentDTO attachmentDTO){
@@ -55,4 +55,5 @@ public class MessageController {
                 sendMessageRequestDTO.getMailContactos(), sendMessageRequestDTO.getIdType());
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
+
 }

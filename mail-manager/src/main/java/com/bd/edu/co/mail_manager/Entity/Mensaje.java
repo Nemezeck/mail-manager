@@ -54,6 +54,14 @@ public class Mensaje {
     @JsonManagedReference
     private List<Destinatario> destinatarios;
 
+    public List<Destinatario> getDestinatarios() {
+        return destinatarios;
+    }
+
+    public void setDestinatarios(List<Destinatario> destinatarios) {
+        this.destinatarios = destinatarios;
+    }
+
     public MensajePK getMensajePK() {
         return mensajePK;
     }

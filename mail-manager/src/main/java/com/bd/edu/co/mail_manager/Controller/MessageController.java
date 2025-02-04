@@ -2,11 +2,8 @@ package com.bd.edu.co.mail_manager.Controller;
 
 import com.bd.edu.co.mail_manager.DTO.*;
 import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
-import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
-import com.bd.edu.co.mail_manager.Entity.Usuario;
 import com.bd.edu.co.mail_manager.Repository.MessageRepository;
-import com.bd.edu.co.mail_manager.Repository.TipoCarpetaRepository;
 import com.bd.edu.co.mail_manager.Service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,8 +73,9 @@ public class MessageController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Mensaje> getMessage(@RequestParam String messageId, @RequestParam String username){
-        Mensaje m = messageRepository.getMensajeByIdAndUser(messageId, username);
+    public ResponseEntity<Map<?, ?>> getMessage(@RequestParam String messageId, @RequestParam String username, @RequestParam String idType){
+        Map<?,?> m = messageService.getMessageInfo(idType, username, messageId);
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
+
 }

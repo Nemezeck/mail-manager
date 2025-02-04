@@ -29,8 +29,12 @@ public class ContactoService {
         Usuario u = userService.getUsuarioById(selfUsername);
         Usuario contactUser = userService.getUsuarioById(contactUserId);
 
-        if(u.getContactos().stream().anyMatch(contacto -> contacto.getUsuario().getUsuario().equals(selfUsername)))
+        boolean alreadyExists = u.getContactos().stream()
+                .anyMatch(contacto -> contacto.getCorreoContacto().equals(contactUser.getCorreoAlterno()));
+
+        if (alreadyExists) {
             throw new RuntimeException("User is already a contact");
+        }
 
         Contacto c = new Contacto();
         c.setCorreoContacto(createContactMail(contactUser.getUsuario(), contactUser.getPais().getDominio()));

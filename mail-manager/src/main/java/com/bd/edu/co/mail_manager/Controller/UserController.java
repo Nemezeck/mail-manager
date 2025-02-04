@@ -5,7 +5,9 @@ import com.bd.edu.co.mail_manager.DTO.LoginRequest;
 import com.bd.edu.co.mail_manager.DTO.UsuarioDTO;
 import com.bd.edu.co.mail_manager.Entity.Contacto;
 import com.bd.edu.co.mail_manager.Entity.Pais;
+import com.bd.edu.co.mail_manager.Entity.Usuario;
 import com.bd.edu.co.mail_manager.Repository.PaisRepository;
+import com.bd.edu.co.mail_manager.Repository.UserRepository;
 import com.bd.edu.co.mail_manager.Service.UserService;
 import org.apache.catalina.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PaisRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     private final AuthenticationManager authenticationManager;
@@ -63,5 +67,11 @@ public class UserController {
     public ResponseEntity<String> getPaisIdByUsername(@RequestParam String username){
         String s = userService.getPaisByUsername(username);
         return new ResponseEntity<>(s, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUsers")
+    public ResponseEntity<List<Usuario>> getAllUsers(){
+        List<Usuario> users = userRepository.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }

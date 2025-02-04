@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, String> {
@@ -33,4 +34,7 @@ public interface UserRepository extends JpaRepository<Usuario, String> {
 
     @Query(value = "SELECT U.IDPAIS FROM USUARIO U WHERE U.USUARIO = :usuario", nativeQuery = true)
     String getPaisIdByUsername(@Param("usuario") String username);
+
+    @Query(value = "SELECT * FROM USUARIO", nativeQuery = true)
+    List<Usuario> getAllUsers();
 }

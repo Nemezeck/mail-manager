@@ -5,6 +5,7 @@ import com.bd.edu.co.mail_manager.Entity.ArchivoAdjunto;
 import com.bd.edu.co.mail_manager.Entity.Destinatario;
 import com.bd.edu.co.mail_manager.Entity.Mensaje;
 import com.bd.edu.co.mail_manager.Entity.Usuario;
+import com.bd.edu.co.mail_manager.Repository.MessageRepository;
 import com.bd.edu.co.mail_manager.Repository.TipoCarpetaRepository;
 import com.bd.edu.co.mail_manager.Service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
     @Autowired
-    private TipoCarpetaRepository repository;
+    private MessageRepository messageRepository;
 
     @PostMapping("/create")
     public ResponseEntity<Mensaje> create(@RequestBody MensajeRequestDTO requestDTO) {
@@ -71,6 +72,12 @@ public class MessageController {
     public ResponseEntity<Map<String, List<String>>> forwardMessage(@RequestBody ForwardMessageRequestDTO dto){
         Map<String, List<String>> m = messageService.forwardMessage(dto.getMessageId(), dto.getSenderUsername(), dto.getMailContactos(),
                 dto.getIdType(), dto.getUsername(), dto.getNewBody());
+        return new ResponseEntity<>(m, HttpStatus.OK);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Mensaje> getMessage(@RequestParam String messageId, @RequestParam String username){
+        Mensaje m = messageRepository.getMensajeByIdAndUser(messageId, username);
         return new ResponseEntity<>(m, HttpStatus.OK);
     }
 }

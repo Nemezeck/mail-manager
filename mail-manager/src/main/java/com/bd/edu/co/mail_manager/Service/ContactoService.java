@@ -77,7 +77,7 @@ public class ContactoService {
         if (!u.getContactos().isEmpty()) {
             return u.getContactos();
         } else {
-            throw new RuntimeException("User has no contacts");
+            return new ArrayList<>();
         }
     }
 }

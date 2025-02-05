@@ -59,18 +59,24 @@ public class UserService {
             throw new IllegalArgumentException("Name and LastName cannot be empty");
         }
 
-        String baseUsername = name.charAt(0) + (lastName.length() >= 4 ? lastName.substring(0, 4) : lastName);
+        // Generate the base username
+        String baseUsername = (name.charAt(0) + lastName).toLowerCase();
+        baseUsername = baseUsername.length() >= 5 ? baseUsername.substring(0, 5) :
+                String.format("%-5s", baseUsername).replace(' ', 'x'); // Fill with 'x' if shorter
 
         String username = baseUsername;
         int counter = 1;
 
+        // Ensure uniqueness while maintaining length = 5
         while (userRepository.findById(username).isPresent()) {
-            username = baseUsername + counter;
+            String suffix = String.valueOf(counter);
+            username = baseUsername.substring(0, 5 - suffix.length()) + suffix;
             counter++;
         }
 
         return username;
     }
+
 
 
     public void updateUser(Usuario u){

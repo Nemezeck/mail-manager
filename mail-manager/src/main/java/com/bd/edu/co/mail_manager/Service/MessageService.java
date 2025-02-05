@@ -340,7 +340,7 @@ public class MessageService {
             m.put("messageid", getMessageChainIds(newMessage));
             m.put("destinatarios", getAllMails(destinatarios));
 
-            updateTipoCarpeta("Env", messageId, senderUsername);
+            updateTipoCarpeta("Env", newMessage.getMensajePK().getIdMensaje(), senderUsername);
 
             duplicateMessageWithParent(newMessage, destinatarios);
 
@@ -413,7 +413,7 @@ public class MessageService {
             sentMessage.setCuerpoMensaje(m.getCuerpoMensaje());
             sentMessage.setUser(userService.findByMail(d.getContacto().getCorreoContacto()));
             sentMessage.setTipoCarpeta(tipoCarpetaService.getTipoCarpetaById("Rec"));
-            sentMessage.setParentMessage(m.getParentMessage());
+            sentMessage.setParentMessage(m);
             sentMessage.setCategoria(m.getCategoria());
 
             messageRepository.insertMensajeWithParent(

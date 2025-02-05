@@ -47,7 +47,7 @@ public interface MessageRepository extends JpaRepository<Mensaje, MensajePK> {
     @Query(value = "select * from mensaje m where m.idmensaje=:idmensaje and m.usuario = :usuario", nativeQuery = true)
     Mensaje getMensajeByIdAndUser(@Param("idmensaje") String messageID, @Param("usuario") String username);
 
-    @Query(value = "SELECT d.USUARIO FROM CONTACTO c, DESTINATARIO d WHERE d.IDMENSAJE = :id AND c.USUARIO = d.USUARIO AND d.IDTIPOCOPIA = 'CO'", nativeQuery = true)
+    @Query(value = "SELECT d.USUARIO FROM DESTINATARIO d WHERE d.IDMENSAJE = :id AND d.IDTIPOCOPIA = 'CO'", nativeQuery = true)
     String getSender(@Param("id") String id);
 
     @Transactional
